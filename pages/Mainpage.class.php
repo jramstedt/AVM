@@ -3,9 +3,15 @@ class Mainpage extends Kernel implements IPage {
 	public $title = 'Mainpage';
 	protected $template = __CLASS__;
 	
+	private $listNode;
+	
+	function __construct() {
+		parent::__construct();
+
+		$this->listNode = Util::tagToXml('list', $this->rootNode);
+	}
+	
 	public function generate() {
-		$listNode = Util::tagToXml('list', $this->rootNode);
-		
 		$filterUrl = new Url();
 		$filterUrl->clearPageParams();
 		$filterUrl->setParam('filter', 1);
@@ -23,7 +29,7 @@ class Mainpage extends Kernel implements IPage {
 		$moviesResult = Kernel::mysqli()->query('SELECT a.* FROM movie a WHERE a.ver IN (SELECT MAX(b.ver) FROM movie b WHERE b.id = a.id) AND watched = 0');
 		if(is_object($moviesResult)) {
 			while($movieObj = $moviesResult->fetch_object()) {
-				Util::objToXml($movieObj, $listNode, 'movie');
+				Util::objToXml($movieObj, $this->listNode, 'movie');
 			}
 			
 			$moviesResult->close();
@@ -32,30 +38,13 @@ class Mainpage extends Kernel implements IPage {
 		$episodesResult = Kernel::mysqli()->query('SELECT a.* FROM episode a WHERE a.ver IN (SELECT MAX(b.ver) FROM episode b WHERE b.id = a.id) AND watched = 0');
 		if(is_object($episodesResult)) {
 			while($episodeObj = $episodesResult->fetch_object()) {
-				Util::objToXml($episodeObj, $listNode, 'episode');
+				Util::objToXml($episodeObj, $this->listNode, 'episode');
 			}
 			
 			$episodesResult->close();
 		}
 
-		$feedsResult = Kernel::mysqli()->query('SELECT * FROM feed');
-		if(is_object($feedsResult)) {
-			while($feedObj = $feedsResult->fetch_object()) {
-				$feed = new Feed($feedObj->data);
-				
-				foreach($feed->entries as $entryObj) {
-					if($entryObj->publishedDate < strtotime(AVM::$torrentTimelimit))
-						continue;
-					
-					$match = @preg_match(AVM::$torrentFilter, $entryObj->title);
-					if(empty($match))
-						continue;
-						
-					Util::objToXml($entryObj, $listNode, 'feeditem');
-				}
-			}
-			$feedsResult->close();
-		}
+		$this->feedList();
 		
 		$uncategorized = 0;
 		
@@ -88,10 +77,12 @@ class Mainpage extends Kernel implements IPage {
 		
 		if(isset($this->url->getPageParams()->filter)) {
 			if(!empty($_POST)) {
-				Kernel::addInfo(Kernel::INFOBOX_INFO, "Filter test! ".$_POST['filter']." ".$_POST['timelimit']);
+				//Kernel::addInfo(Kernel::INFOBOX_INFO, "Filter test! ".$_POST['filter']." ".$_POST['timelimit']);
 				
 				AVM::setFilter($_POST['filter']);
 				AVM::setTimelimit($_POST['timelimit']);
+				
+				$this->feedList();
 			}
 		} else if(isset($this->url->getPageParams()->watched)) {
 			if(isset($this->url->getPageParams()->id)) {
@@ -114,6 +105,27 @@ class Mainpage extends Kernel implements IPage {
 					Util::objToXml((object)array('id' => $id), $removeNode, 'episode');
 				}
 			}
+		}
+	}
+	
+	private function feedList() {
+		$feedsResult = Kernel::mysqli()->query('SELECT * FROM feed');
+		if(is_object($feedsResult)) {
+			while($feedObj = $feedsResult->fetch_object()) {
+				$feed = new Feed($feedObj->data);
+				
+				foreach($feed->entries as $entryObj) {
+					if($entryObj->publishedDate < strtotime(AVM::$torrentTimelimit))
+						continue;
+					
+					$match = @preg_match(AVM::$torrentFilter, $entryObj->title);
+					if(empty($match))
+						continue;
+						
+					Util::objToXml($entryObj, $this->listNode, 'feeditem');
+				}
+			}
+			$feedsResult->close();
 		}
 	}
 }

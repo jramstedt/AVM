@@ -10,9 +10,6 @@ class AVM implements IModule {
 	public function __construct(Kernel $kernel) {
 		$this->kernel = $kernel;
 		
-		if(Util::isAjaxRequest())
-			return;
-		
 		Util::valueToXml('videoformatjson', json_encode(self::$videoFormat), $kernel->rootNode);
 		Util::valueToXml('audioformatjson', json_encode(self::$audioFormat), $kernel->rootNode);
 

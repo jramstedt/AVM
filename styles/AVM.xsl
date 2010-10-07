@@ -409,6 +409,16 @@
 		</div>
 	</xsl:template>
 	
+	<xsl:template name="feedList" xmlns="http://www.w3.org/1999/xhtml">
+		<xsl:if test="/page/list"> 
+			<div id="feedList">
+				<xsl:apply-templates select="/page/list/feeditem">
+					<xsl:sort select="publishedDate" data-type="number" order="descending"/>
+				</xsl:apply-templates>
+			</div>
+		</xsl:if>
+	</xsl:template>
+	
 	<xsl:template match="torrent" xmlns="http://www.w3.org/1999/xhtml">
 		<div class="box">
 			<xsl:attribute name="id">torrent:<xsl:value-of select="id" /></xsl:attribute>
@@ -670,5 +680,70 @@
 				</xsl:if>
 			</div>
 		</div>
+	</xsl:template>
+	
+	<xsl:template match="seek" mode="remove">
+		<remove>seek:<xsl:value-of select="id" /></remove>
+	</xsl:template>
+	
+	<xsl:template match="seek" mode="list" xmlns="http://www.w3.org/1999/xhtml">
+		<div>
+			<xsl:attribute name="id">seek:<xsl:value-of select="id" /></xsl:attribute>
+			<div class="left">
+				<xsl:value-of select="name" />
+			</div>
+			<div class="right">
+				<p>X</p>
+			</div>
+			<div style="clear:both">
+				<xsl:comment></xsl:comment>
+			</div>
+		</div>
+	</xsl:template>
+	
+	<xsl:template match="seek" mode="editable" xmlns="http://www.w3.org/1999/xhtml">
+		<div class="box">
+			<xsl:attribute name="id">seek:<xsl:value-of select="id" /></xsl:attribute>
+			<div class="box_title">
+				<div class="left">
+					<span class="edit">
+						<xsl:attribute name="id">name:<xsl:value-of
+							select="id" /></xsl:attribute>
+						<xsl:value-of select="name" />
+					</span>
+					(
+					<span class="editNumeric">
+						<xsl:attribute name="id">year:<xsl:value-of
+							select="id" /></xsl:attribute>
+						<xsl:value-of select="year" />
+					</span>
+					)
+				</div>
+				<div class="right">
+					<p>X</p>
+				</div>
+				<div class="clearer">
+					<xsl:comment></xsl:comment>
+				</div>
+			</div>
+			<div class="box_content" style="display: none;">
+				<p>
+					<label>Url:</label>
+					<span class="edit">
+						<xsl:attribute name="id">url:<xsl:value-of
+							select="id" /></xsl:attribute>
+						<xsl:value-of select="url" />
+					</span>
+				</p>
+			</div>
+		</div>
+	</xsl:template>
+	
+	<xsl:template name="editableSeekList" xmlns="http://www.w3.org/1999/xhtml">
+		<xsl:if test="/page/list"> 
+			<div id="editableSeekList">
+				<xsl:apply-templates select="/page/list/seek" mode="editable" />
+			</div>
+		</xsl:if>
 	</xsl:template>
 </xsl:stylesheet>

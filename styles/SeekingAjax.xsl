@@ -21,13 +21,9 @@
 		<ajax>
 			<xsl:apply-templates select="/page/kernel/infobox/item"/>
 			<xsl:apply-templates select="/page/infobox/item"/>
-			<xsl:apply-templates select="/page/kernel/kernelDebug" />
-
-			<xsl:apply-templates select="/page/remove/movie" mode="remove"/>
-			<xsl:apply-templates select="/page/remove/episode" mode="remove"/>
-			<xsl:apply-templates select="/page/remove/feeditem" mode="remove"/>
+			<xsl:apply-templates select="/page/kernel/kernelDebug"/>
 			
-			<xsl:call-template name="feedList"/>
+			<xsl:call-template name="editableSeekList"/>
 		</ajax>
 	</xsl:template>	
 </xsl:stylesheet>

@@ -27,7 +27,11 @@ class Menu implements IModule {
 			$menuUrl->clearPageParams();
 			$menuUrl->setPage('Unhandled');
 			$this->kernel->addMenuItem($menuUrl, 'Unhandled');
-				
+			
+			$menuUrl->clearPageParams();
+			$menuUrl->setPage('Seeking');
+			$this->kernel->addMenuItem($menuUrl, 'Seeking');
+			
 			$menuUrl->clearPageParams();
 			$menuUrl->setPage('Login');
 			$menuUrl->setParam('logout', 1);

@@ -92,7 +92,7 @@
 										Torrents from feeds
 									</div>
 									<div class="right">
-										<form method="post">
+										<form id="feedFilter" method="post">
 											<xsl:attribute name="action"> <xsl:value-of
 												select="/page/filterurl" /> </xsl:attribute>
 												
@@ -106,70 +106,28 @@
 								</div>
 								<div class="box_content">
 									<xsl:comment></xsl:comment>
-									<xsl:apply-templates select="/page/list/feeditem">
-										<xsl:sort select="publishedDate" data-type="number" order="descending"/>
-									</xsl:apply-templates>
+									<xsl:call-template name="feedList"/>
 								</div>
 							</div>
-							<xsl:comment>
-							<div class="box">
-								<div class="box_title">New Torrents</div>
-								<div class="box_content">
-									<table width="100%" border="0" cellspacing="0"
-										cellpadding="0" summary="Filtered torrents" class="data_table">
-										<tr>
-											<th scope="col">Torrent</th>
-											<th scope="col" width="100">Download!</th>
-										</tr>
-										<xsl:for-each select="/page/filtered/torrent">
-											<xsl:sort select="*[name() = /page/newtorrent/sort]"
-												data-type="{/page/newtorrent/sort/@type}" order="{/page/newtorrent/sort/@order}" />
-											<tr>
-												<td>
-													<xsl:value-of select="name" />
-												</td>
-												<td>
-													<a>
-														<xsl:attribute name="href"> <xsl:value-of
-															select="downloadurl" /> </xsl:attribute>
-														watched
-													</a>
-												</td>
-											</tr>
-										</xsl:for-each>
-									</table>
-								</div>
-							</div>
-							<div class="box">
-								<div class="box_title">New Torrents</div>
-								<div class="box_content">
-									<table width="100%" border="0" cellspacing="0"
-										cellpadding="0" summary="Waiting for completion" class="data_table">
-										<tr>
-											<th scope="col">Torrent</th>
-											<th scope="col" width="100">Percentage</th>
-										</tr>
-										<xsl:for-each select="/page/downloading/torrent">
-											<xsl:sort select="*[name() = /page/downloading/sort]"
-												data-type="{/page/downloading/sort/@type}" order="{/page/downloading/sort/@order}" />
-											<tr>
-												<td>
-													<xsl:value-of select="name" />
-												</td>
-												<td>
-													<xsl:value-of select="percentage" />
-												</td>
-											</tr>
-										</xsl:for-each>
-									</table>
-								</div>
-							</div>
-							</xsl:comment>
 						</div>
 					</div>
 				</div>
 				<xsl:call-template name="Footer" />
-
+				<!-- <div id="functionBar">
+					<ul>
+						<li><img src="movie_add.png" alt="Watched this." title="Set as watched."/></li>
+						<li><img src="movie_add.png" alt="Watched this." title="Set as watched."/></li>
+						<li><img src="movie_add.png" alt="Watched this." title="Set as watched."/></li>
+						<li><img src="movie_add.png" alt="Watched this." title="Set as watched."/></li>
+						<li><img src="movie_add.png" alt="Watched this." title="Set as watched."/></li>
+						<li><p>34243</p></li>
+						<li><p>sdad</p></li>
+						<li><p>kjh</p></li>
+						<li><p>dfsfds</p></li>
+						<li><p>vfdcvc</p></li>
+						<li><p>r56546</p></li>
+					</ul>
+				</div> -->
 			</body>
 		</html>
 	</xsl:template>

@@ -565,7 +565,6 @@ div.comment_list {
 /*
 	Info box
 ------------------------------------------------------------------- */
-
 div#infobar div.error {
 	border: thin solid #FF6E6E;
 	background-color: #FFDDDD;
@@ -633,4 +632,61 @@ div#infobar div.ok {
 	color: #000;
 	font-weight: 700;
 	background-color: #eee;
+}
+
+/*
+	Function Bar
+------------------------------------------------------------------- */
+div#functionBar {
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+
+	padding-left: 5px;
+	padding-bottom: 10px;
+	padding-top: 5px;
+
+	background: url('bg.png') repeat-x bottom;
+}
+
+div#functionBar ul li {
+	cursor: pointer;
+	font: normal 1em Verdana, sans-serif;
+	
+	margin-top: 5px;
+	width: auto;
+	
+	list-style: none;
+	display: inline;
+	text-decoration: none;
+}
+
+div#functionBar p:hover {
+	background: url('grain_light.gif');
+	border: 1px solid #5A5A50;
+}
+
+div#functionBar p {
+	background: #E9E8E8 url('backgrounds.gif') repeat-x 0 -366px;
+	border: 1px solid #888;
+	border-color: #BBB #888 #888 #CCC;
+	border-radius: 5px 5px;
+	
+	cursor: pointer;
+	font: normal 1em Verdana, sans-serif;
+	
+	margin: 0px 2px 0px 2px;
+	width: auto;
+	
+	list-style: none;
+	display: inline;
+	text-decoration: none;
+	
+	padding: 5px;
+}
+
+div#functionBar img {
+	margin: 0px 2px -10px 2px;
+	padding: 0px;
 }

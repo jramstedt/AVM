@@ -94,3 +94,11 @@ CREATE TABLE `usersetting` (
   PRIMARY KEY (`id`),
   FOREIGN KEY (`id`) references `user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `seek` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` TINYTEXT collate utf8_unicode_ci NOT NULL,
+  `year` SMALLINT,
+  `url` TINYTEXT collate utf8_unicode_ci,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
