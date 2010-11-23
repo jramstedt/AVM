@@ -8,6 +8,8 @@ class Kernel {
 	
 	private static $mysqli;
 
+	private $basePath;
+	
 	private $kernelNode;
 	private $menuNode;
 	private $infoNode;
@@ -27,6 +29,10 @@ class Kernel {
 	const CONTENT_TYPE_PLAIN = 'text/plain';
 	
 	public function __construct() {
+		ob_start();
+
+		$this->basePath = realpath(dirname($_SERVER['SCRIPT_FILENAME'])).'/';
+		
 		$this->doc = new DOMDocument('1.0', 'utf-8');
 		$this->doc->xmlStandalone = true;
 		$this->doc->formatOutput = true;
@@ -61,6 +67,7 @@ class Kernel {
 
 	public function __destruct() {
 		$this->processPage($this->template);
+		//while(@ob_end_flush());
 	}
 
 	public function addMenuItem(Url $url, $text) {
@@ -121,7 +128,7 @@ class Kernel {
 			$template .= 'Ajax';
 
 		$xsl = new DOMDocument();
-		$xsl->load(PATH_XSLT.$template.'.xsl');
+		$xsl->load($this->basePath.PATH_XSLT.$template.'.xsl');
 
 		$proc = new XSLTProcessor();
 		$proc->importStyleSheet($xsl);
@@ -130,13 +137,13 @@ class Kernel {
 	
 	private function initializeModules() {
 		if(function_exists('glob')) {
-			foreach (glob(PATH_CLASS.'module/*.class.php') as $filename) {
+			foreach (glob($this->basePath.PATH_CLASS.'module/*.class.php') as $filename) {
 				require_once $filename;
 				$className = basename($filename, '.class.php');
 				$module[] = new $className($this);
 			}
 		} else {
-			if ($handle = opendir(PATH_CLASS.'module/')) {
+			if ($handle = opendir($this->basePath.PATH_CLASS.'module/')) {
 				while (false !== ($file = readdir($handle))) {
 					if ($file != '.' && $file != '..') {
 						require_once $file;

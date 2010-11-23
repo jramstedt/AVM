@@ -54,4 +54,5 @@ if(isset($errorCode)) {
 	$tmpUrl->setParam('code', $errorCode);
 	header('Location: '.$tmpUrl->buildUrlString());
 }
+
 ?>

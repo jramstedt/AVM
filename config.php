@@ -29,6 +29,9 @@ define('USERLEVEL_NONE', 0);
 define('COOKIE_NAME', 'AudioVideoManagement');
 define('COOKIE_LIFETIME', 7200);
 
+//MISC
+define('MONITORED_FILESYSTEMS', '/'); // Comma seperated list
+
 /*
  * MYSQLi
  * Use persist connections (p:localhost) for php 5.3

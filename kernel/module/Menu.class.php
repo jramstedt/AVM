@@ -33,6 +33,10 @@ class Menu implements IModule {
 			$this->kernel->addMenuItem($menuUrl, 'Seeking');
 			
 			$menuUrl->clearPageParams();
+			$menuUrl->setPage('Statistics');
+			$this->kernel->addMenuItem($menuUrl, 'Statistics');
+			
+			$menuUrl->clearPageParams();
 			$menuUrl->setPage('Login');
 			$menuUrl->setParam('logout', 1);
 			$this->kernel->addMenuItem($menuUrl, 'Logout');

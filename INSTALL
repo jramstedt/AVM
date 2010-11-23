@@ -4,14 +4,8 @@ Audio/Video Management
 INSTALLATION:
   1. Untar (or copy) to desired directory. For example /opt (files will be in /opt/AVM)
   2. Setup http server configuration
-	Lighttpd:
-		alias.url += ( "/AVM" => "/opt/AVM" )
-		url.rewrite += ( "^/AVM.*[/](.*(css))" => "/AVM/$1",
-                 		 "^/AVM.*[/](.*(jpg|png|gif))" => "/AVM/image/$1",
-                 		 "^/AVM.*[/](.*(js))" => "/AVM/js/$1",
-                 		 "^/AVM/(.*)$" => "/AVM/index.php?$1")
-	Apache:
-		---
+	Lighttpd:	lighttpd.template
+	Apache:		htaccess.template
   3. Create MySQL database. 
   4. Import database.sql
   5. Set privileges to database:
@@ -28,9 +22,13 @@ INSTALLATION:
 		UPDATE name year url
 		DELETE
   7. Edit config.php
-  8. Add feed updater cronjob:
-	0 * * * * cd /opt/AVM && /opt/AVM/avmutility.php --updatefeeds >/dev/null 2>&1
-  9. Add user row to user table:
+  8. Check that avmutility.php has correct interpreter directive for your system (e.g. #!/usr/bin/php)
+  9. Add feed and disk usage updater cronjob:
+	0 * * * * cd /opt/AVM && /opt/AVM/avmutility.php --updateusage --updatefeeds >/dev/null 2>&1
+  10. Only read rights are needed for most files.
+	avmutility.php should also have execute right.
+	!IMPORTANT! config.php should only have read rights for www-user!
+  11. Add user row to user table:
 	INSERT INTO  `AVMDB`.`user` (`id` ,`username` ,`authkey` ,`level` ,`ver`)
 	VALUES (NULL ,  'exampleuser', SHA1('examplepassword') ,  '3',  '0');
 

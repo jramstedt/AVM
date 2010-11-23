@@ -102,3 +102,12 @@ CREATE TABLE `seek` (
   `url` TINYTEXT collate utf8_unicode_ci,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `fsdata` (
+  `filesystem` TEXT collate utf8_unicode_ci NOT NULL,
+  `date` DATETIME NOT NULL,
+  `free` BIGINT NOT NULL,
+  `total` BIGINT NOT NULL,
+  `used` BIGINT NOT NULL,
+  INDEX (`filesystem`(8))
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

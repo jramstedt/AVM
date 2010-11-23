@@ -9,27 +9,36 @@ function __autoload($class_name) {
 }
 
 $args = parseArgs($argv);
+$indexCounter = 0;
 
 if(isset($args['h'])) {
 	echoHelp($argv);
 	exit(0);
-} else if(isset($args['updatefeeds'])) {
-	updateFeeds();
-	exit(0);
-} else if(isset($args['addfeed'])) {
-	if(isset($args[0])) {
-		addFeed($args[0]);
-		exit(0);
-	}
-} else if(isset($args['addtorrent'])) {
-	if(isset($args[0]) && isset($args[1])) {
-		addTorrent($args[0], $args[1]);
-		exit(0);
-	}
 }
 
-echo "Invalid option.\nTry '{$argv[0]} -h' for more information.\n";
-exit(1);
+if(isset($args['updateusage'])) {
+	updateDiskUsage();
+} 
+
+if(isset($args['updatefeeds'])) {
+	updateFeeds();
+} 
+
+if(isset($args['addfeed'])) {
+	if(isset($args[$indexCounter]))
+		addFeed($args[$indexCounter++]);
+	else
+		echoError($argv);
+}
+
+if(isset($args['addtorrent'])) {
+	if(isset($args[$indexCounter]) && isset($args[$indexCounter+1]))
+		addTorrent($args[$indexCounter++], $args[$indexCounter++]);
+	else
+		echoError($argv);
+}
+
+exit(0);
 
 /*
  * From: http://pwfisher.com/nucleus/index.php?itemid=45
@@ -45,6 +54,19 @@ function parseArgs($argv) {
             else { foreach (str_split(substr($a,1)) as $k){ if (!isset($o[$k])){ $o[$k] = true; } } } }
         else { $o[] = $a; } }
     return $o;
+}
+
+function updateDiskUsage() {
+	$fss = explode(',', MONITORED_FILESYSTEMS);
+	
+	foreach ($fss as $fs) {
+		$fsmysql = Kernel::mysqli()->escape_string($fs);
+		$total = disk_total_space($fs);
+		$free = disk_free_space($fs);
+		$used = $total-$free;
+		
+		Kernel::mysqli()->query("INSERT INTO fsdata (filesystem, date, free, total, used) VALUES('$fsmysql', NOW(), $free, $total, $used)");
+	}
 }
 
 function updateFeeds() {
@@ -84,11 +106,17 @@ function echoHelp($argv) {
 	echo "       {$argv[0]} --addtorrent <storage> <torrent>\n";
 	echo "\n";
 	echo "  -h                               This help.\n";
+	echo "  --updateusage                    Update disk space usage.\n";
 	echo "  --updatefeeds                    Update rss feeds.\n";
 	echo "  --addfeed <feed url>             Add feed.\n";
 	echo "  --addtorrent <storage> <torrent> Add torrent.\n";
 	echo "                                   <storage> is path to filesystem where files are located.\n";
 	echo "                                   <torrent> is torrent file.\n";
+}
+
+function echoError($argv) {
+	echo "Invalid option.\nTry '{$argv[0]} -h' for more information.\n";
+	exit(1);	
 }
 
 ?>

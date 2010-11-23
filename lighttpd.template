@@ -1,4 +1,5 @@
-url.rewrite += ( "^/AVM.*[/](.*(css))" => "/AVM/$1",
+alias.url += ( "/AVM" => "/opt/AVM" )
+url.rewrite += ( "^/AVM.*[/](.*(css|xsd))" => "/AVM/$1",
                  "^/AVM.*[/](.*(jpg|png|gif))" => "/AVM/image/$1",
                  "^/AVM.*[/](.*(js))" => "/AVM/js/$1",
                  "^/AVM/(.*)$" => "/AVM/index.php?$1")
